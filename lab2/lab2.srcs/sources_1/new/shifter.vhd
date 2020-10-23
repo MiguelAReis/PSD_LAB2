@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 10/23/2020 03:50:28 PM
+-- Create Date: 10/23/2020 04:47:15 PM
 -- Design Name: 
--- Module Name: multiplier - Behavioral
+-- Module Name: shifter - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -24,20 +24,24 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_SIGNED.all;
 
+entity shifter is
+    Port ( inBus : in STD_LOGIC_VECTOR (31 downto 0);
+           outBus : out STD_LOGIC_VECTOR (31 downto 0);
+           enable : in STD_LOGIC);
+end shifter;
 
-entity multiplier is
-    Port ( A : in STD_LOGIC_VECTOR (31 downto 0);
-           B : in STD_LOGIC_VECTOR (31 downto 0);
-           result : out STD_LOGIC_VECTOR (31 downto 0));
-end multiplier;
+architecture Behavioral of shifter is
 
-architecture Behavioral of multiplier is
-    SIGNAL tempResult : STD_LOGIC_VECTOR (63 downto 0);
+
 begin
-    PROCESS(A,B)
+    PROCESS (inBus,enable)
     BEGIN
-        tempResult<= (A*B);
-        result<= tempResult(31 downto 0);
+        IF enable = '1' THEN
+            outBus <= "00" & inBus(31 downto 2);
+        ELSE
+            outBus <= inBus;
+        END IF;
     END PROCESS;
+
 
 end Behavioral;
