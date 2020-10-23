@@ -14,7 +14,7 @@ architecture Behavioral of ALU is
 begin
     PROCESS (A,B,oper)
         BEGIN
-        IF oper = '0' then
+        IF oper = '0' then -- 0 or ADD 1 for SUBTRACTION
             result <= A+B;
         ELSE
             result <= A-B;
