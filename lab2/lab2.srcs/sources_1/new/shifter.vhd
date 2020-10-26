@@ -26,21 +26,16 @@ use IEEE.STD_LOGIC_SIGNED.all;
 
 entity shifter is
     Port ( inBus : in STD_LOGIC_VECTOR (31 downto 0);
-           outBus : out STD_LOGIC_VECTOR (31 downto 0);
-           enable : in STD_LOGIC);
+           outBus : out STD_LOGIC_VECTOR (31 downto 0));
 end shifter;
 
 architecture Behavioral of shifter is
 
 
 begin
-    PROCESS (inBus,enable)
+    PROCESS (inBus)
     BEGIN
-        IF enable = '1' THEN
-            outBus <= "00" & inBus(31 downto 2);
-        ELSE
-            outBus <= inBus;
-        END IF;
+        outBus <= "00" & inBus(31 downto 2);
     END PROCESS;
 
 

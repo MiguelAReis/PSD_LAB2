@@ -37,7 +37,6 @@ begin
     PROCESS(A,B)
     BEGIN
         tempResult<= (A*B);
-        result<= tempResult(31 downto 0);
     END PROCESS;
-
+    result<= tempResult(31 downto 0);
 end Behavioral;

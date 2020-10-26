@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 10/23/2020 06:30:33 PM
+-- Create Date: 10/26/2020 11:37:38 AM
 -- Design Name: 
--- Module Name: multiplexer - Behavioral
+-- Module Name: reg - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -20,7 +20,9 @@
 
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.STD_LOGIC_ARITH.all;
+use IEEE.STD_LOGIC_SIGNED.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,23 +33,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity multiplexer is
-    Port ( inBus0 : in STD_LOGIC_VECTOR (31 downto 0);
-           inBus1 : in STD_LOGIC_VECTOR (31 downto 0);
-           inBus2 : in STD_LOGIC_VECTOR (31 downto 0);
-           inBus3 : in STD_LOGIC_VECTOR (31 downto 0);
-           outBus : out STD_LOGIC_VECTOR (31 downto 0);
-           address : in STD_LOGIC_VECTOR (1 downto 0));
-end multiplexer;
+entity reg is
+    Port ( D : in STD_LOGIC_VECTOR (31 downto 0);
+           Q : out STD_LOGIC_VECTOR (31 downto 0);
+           clk : in STD_LOGIC);
+end reg;
 
-architecture Behavioral of multiplexer is
-
-begin
-WITH address SELECT
-    outBus <= inBus0 when "00",
-              inBus1 WHEN "01",
-              inBus2 WHEN "10",
-              inBus3 WHEN OTHERS;
-              
+architecture Behavioral of reg is
+BEGIN
+    PROCESS(clk)
+    BEGIN
+        IF clk'event and clk ='1' then
+            Q <=D;
+        end if;
+    END PROCESS;
 
 end Behavioral;
