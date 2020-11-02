@@ -2,18 +2,19 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.STD_LOGIC_SIGNED.all;
+use IEEE.numeric_std.all;
 
 
 entity datapath is
     Port ( clk : in STD_LOGIC;
            muxAddr : in STD_LOGIC_VECTOR (1 downto 0);
            outValue : out STD_LOGIC_VECTOR (31 downto 0);
-           inA : in STD_LOGIC_VECTOR (31 downto 0);
-           inB : in STD_LOGIC_VECTOR (31 downto 0);
-           inC : in STD_LOGIC_VECTOR (31 downto 0);
-           inD : in STD_LOGIC_VECTOR (31 downto 0);
-           inE : in STD_LOGIC_VECTOR (31 downto 0);
-           inF : in STD_LOGIC_VECTOR (31 downto 0);
+           inA : in STD_LOGIC_VECTOR (15 downto 0);
+           inB : in STD_LOGIC_VECTOR (15 downto 0);
+           inC : in STD_LOGIC_VECTOR (15 downto 0);
+           inD : in STD_LOGIC_VECTOR (15 downto 0);
+           inE : in STD_LOGIC_VECTOR (15 downto 0);
+           inF : in STD_LOGIC_VECTOR (15 downto 0);
            oper : in STD_LOGIC);
 end datapath;
 
@@ -23,8 +24,11 @@ architecture Behavioral of datapath is
     SIGNAL shifterOut : STD_LOGIC_VECTOR(31 downto 0);
     SIGNAL ALU0Out, ALU1Out : STD_LOGIC_VECTOR(31 downto 0);
     SIGNAL multiplier0Out, multiplier1Out : STD_LOGIC_VECTOR(31 downto 0);
-    SIGNAL shiftedSignal :STD_LOGIC_VECTOR(31 downto 0) := "00" & mux5Out(31 downto 2);
+    SIGNAL shiftedSignal :STD_LOGIC_VECTOR(31 downto 0);
     SIGNAL DONTCARE : STD_LOGIC_VECTOR(31 downto 0):= (others =>'X');
+    SIGNAL Zeros : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
+    SIGNAL A, B, C, D, E, F: STD_LOGIC_VECTOR(31 downto 0);
+    
 
     COMPONENT ALU
         PORT(
@@ -60,6 +64,15 @@ architecture Behavioral of datapath is
     END COMPONENT;
         
 begin
+
+
+A <= SXT(inA,32);
+B <= SXT(inB,32);
+C <= SXT(inC,32);
+D <= SXT(inD,32);
+E <= SXT(inE,32);
+F <= SXT(inF,32);
+shiftedSignal <= mux5Out(31)& mux5Out(31)& mux5Out(31 downto 2);
 
     inst_reg0 : reg port map(
         D => multiplier0Out ,
@@ -106,15 +119,15 @@ begin
         
 
     inst_mux0 : multiplexer port map(
-        inBus0 => inB,
-        inBus1 => inE,
+        inBus0 => B,
+        inBus1 => E,
         inBus2 => reg3Out,
         inBus3 => DONTCARE, -- Dont Care
         outBus => mux0Out,
         address => muxAddr );
         
     inst_mux1 : multiplexer port map(
-        inBus0 => inF,
+        inBus0 => F,
         inBus1 => reg3Out,
         inBus2 => reg0Out,
         inBus3 => DONTCARE, -- Dont Care
@@ -123,7 +136,7 @@ begin
         
     inst_mux2 : multiplexer port map(
         inBus0 => DONTCARE,     -- Dont Care
-        inBus1 => inA,
+        inBus1 => A,
         inBus2 => reg1Out,
         inBus3 => DONTCARE, -- Dont Care
         outBus => mux2Out,
@@ -131,7 +144,7 @@ begin
         
     inst_mux3 : multiplexer port map(
         inBus0 => DONTCARE,     -- Dont Care
-        inBus1 => inE,
+        inBus1 => E,
         inBus2 => reg2Out,
         inBus3 => DONTCARE, -- Dont Care
         outBus => mux3Out,
@@ -139,7 +152,7 @@ begin
         
     inst_mux4 : multiplexer port map(
         inBus0 => DONTCARE,     -- Dont Care
-        inBus1 => reg0Out,
+        inBus1 => reg3Out,
         inBus2 => DONTCARE, -- Dont Care
         inBus3 => DONTCARE, -- Dont Care
         outBus => mux4Out,
@@ -147,29 +160,29 @@ begin
     
     inst_mux5 : multiplexer port map(
         inBus0 => DONTCARE,     -- Dont Care
-        inBus1 => reg3Out,
+        inBus1 => reg0Out,
         inBus2 => DONTCARE, -- Dont Care
         inBus3 => DONTCARE, -- Dont Care
         outBus => mux5Out,
         address => muxAddr );
    
     inst_mux6 : multiplexer port map(
-        inBus0 => inC,     
-        inBus1 => inA,
+        inBus0 => C,     
+        inBus1 => A,
         inBus2 => DONTCARE, -- Dont Care
-        inBus3 => reg0Out, 
+        inBus3 => reg1Out, 
         outBus => mux6Out,
         address => muxAddr );
         
     inst_mux7 : multiplexer port map(
-        inBus0 => inD,     
+        inBus0 => D,     
         inBus1 => reg0Out,
         inBus2 => DONTCARE, -- Dont Care
-        inBus3 => reg1Out,
-        outBus => mux6Out,
+        inBus3 => reg0Out,
+        outBus => mux7Out,
         address => muxAddr );
 
     
-    outValue <= reg3Out;
+    outValue <= ALU1Out;
 
 end Behavioral;

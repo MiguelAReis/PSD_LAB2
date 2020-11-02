@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 10/28/2020 01:02:17 PM
+-- Create Date: 11/02/2020 08:20:49 AM
 -- Design Name: 
--- Module Name: counter - Behavioral
+-- Module Name: delay - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,8 +21,6 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.all;
-use IEEE.STD_LOGIC_UNSIGNED.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -33,33 +31,21 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity counter is
-    Port ( clk : in STD_LOGIC;
-           rst : in STD_LOGIC;
-           enable : in STD_LOGIC;
-           counterOut : out STD_LOGIC_VECTOR (3 downto 0));
-end counter;
+entity delay is
+    Port ( D : in STD_LOGIC_VECTOR (3 downto 0);
+           Q : out STD_LOGIC_VECTOR (3 downto 0);
+           clk : in STD_LOGIC);
+end delay;
 
-architecture Behavioral of counter is
-SIGNAL check : STD_LOGIC;
-Signal count : STD_LOGIC_VECTOR (3 downto 0);
+architecture Behavioral of delay is
 
 begin
-
-    PROCESS(clk, rst)
-     BEGIN
-        if (rst = '1') then
-            count <= (others => '0');
-            check <= '0';
-        elsif clk'event and clk ='1' then
-            if (enable = '1') then
-            count <= count+1;
-            end if;
+PROCESS(clk)
+    BEGIN
+        IF clk'event and clk ='1' then
+            Q <=D;
         end if;
     END PROCESS;
-
-counterOut<= count;    
-   
 
 
 end Behavioral;

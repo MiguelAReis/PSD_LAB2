@@ -37,7 +37,7 @@ begin
                 WHEN s4=>
                     state <= s5;
 				WHEN s5=>
-					IF index = 16 THEN
+					IF index = 15 THEN
 					state <= sFim;
 					ELSE
 					state <= s1;
@@ -79,13 +79,13 @@ begin
 				addr <= "10";
 				oper <= '0';
 				we <= '0';
-				enable <= '0';
+				enable <= '1';
 				done <= '0';
 			WHEN s5=>
 				addr <= "11";
 				oper <= '1';
 				we <= '1';
-				enable <= '1';
+				enable <= '0';
 				done <= '0';
 			WHEN sFim=>
 				addr <= "00";

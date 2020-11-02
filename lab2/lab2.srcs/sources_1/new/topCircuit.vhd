@@ -38,8 +38,13 @@ SIGNAL we_int: STD_LOGIC;
 SIGNAL oper_int: STD_LOGIC;
 SIGNAL muxAddr_int : STD_LOGIC_VECTOR (1 downto 0);
 SIGNAL memAddr_int : STD_LOGIC_VECTOR (3 downto 0);
+SIGNAL memAddr_delay : STD_LOGIC_VECTOR (3 downto 0);
 SIGNAL A_int, B_int, C_int, D_int, E_int, F_int : std_logic_vector(15 downto 0);
 SIGNAL outValue_int : std_logic_vector(31 downto 0);
+SIGNAL memAddr : STD_LOGIC_VECTOR (9 downto 0);
+SIGNAL memAddr_intdelay : STD_LOGIC_VECTOR (9 downto 0);
+
+
 
 COMPONENT Control 
     PORT(
@@ -49,7 +54,8 @@ COMPONENT Control
         we : out STD_LOGIC;
         oper : out STD_LOGIC;
         muxAddr : out STD_LOGIC_VECTOR ( 1 downto 0);
-        memAddr : out STD_LOGIC_VECTOR (3 downto 0));
+        memAddr : out STD_LOGIC_VECTOR (3 downto 0);
+        memAddr_delay : out STD_LOGIC_VECTOR (3 downto 0));
 END COMPONENT;
 
 COMPONENT datapath
@@ -57,12 +63,12 @@ COMPONENT datapath
         clk : in STD_LOGIC;
         muxAddr : in STD_LOGIC_VECTOR (1 downto 0);
         outValue : out STD_LOGIC_VECTOR (31 downto 0);
-        inA : in STD_LOGIC_VECTOR (31 downto 0);
-        inB : in STD_LOGIC_VECTOR (31 downto 0);
-        inC : in STD_LOGIC_VECTOR (31 downto 0);
-        inD : in STD_LOGIC_VECTOR (31 downto 0);
-        inE : in STD_LOGIC_VECTOR (31 downto 0);
-        inF : in STD_LOGIC_VECTOR (31 downto 0);
+        inA : in STD_LOGIC_VECTOR (15 downto 0);
+        inB : in STD_LOGIC_VECTOR (15 downto 0);
+        inC : in STD_LOGIC_VECTOR (15 downto 0);
+        inD : in STD_LOGIC_VECTOR (15 downto 0);
+        inE : in STD_LOGIC_VECTOR (15 downto 0);
+        inF : in STD_LOGIC_VECTOR (15 downto 0);
         oper : in STD_LOGIC);
 END COMPONENT;
 
@@ -85,6 +91,9 @@ END COMPONENT;
 
 begin
 
+memAddr <= "000000"&memAddr_int;
+memAddr_intdelay <= "000000"&memAddr_delay;
+
 inst_Control : Control port map(
     clk => clk,
     rst => rst,
@@ -92,10 +101,11 @@ inst_Control : Control port map(
     we => we_int,
     oper => oper_int,
     muxAddr => muxAddr_int,
-    memAddr => memAddr_int);
+    memAddr => memAddr_int,
+    memAddr_delay =>memAddr_delay);
     
 we <= we_int;
-addr <= memAddr_int;
+addr <= memAddr_delay;
 
 inst_datapath : datapath port map(
     clk => clk,
@@ -111,11 +121,20 @@ inst_datapath : datapath port map(
     
 inst_memOut : memOut port map(
     clk => clk   ,
-    addr => memAddr_int,
+    addr => memAddr_intdelay,
     we => we_int,
     dataIN => outValue_int,
     dataOUT => dataOUT);
     
- -- falta memIN
+ 
+ inst_MemIN : MemIN port map(
+    clk => clk,
+    addr => memAddr,
+    A => A_int,
+    B => B_int,
+    C => C_int,
+    D => D_int, 
+    E => E_int,  
+    F => F_int);-- falta memIN
 
 end Behavioral;

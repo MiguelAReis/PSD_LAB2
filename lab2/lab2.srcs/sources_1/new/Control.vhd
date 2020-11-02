@@ -11,12 +11,14 @@ entity Control is
            we : out STD_LOGIC;
            oper : out STD_LOGIC;
            muxAddr : out STD_LOGIC_VECTOR ( 1 downto 0);
-           memAddr : out STD_LOGIC_VECTOR (3 downto 0));
+           memAddr : out STD_LOGIC_VECTOR (3 downto 0);
+           memAddr_delay :out STD_LOGIC_VECTOR (3 downto 0));
 end Control;
 
 architecture Behavioral of Control is
 SIGNAL enableCounter : STD_LOGIC;
 SIGNAL counterValue: std_LOGIC_VECTOR (3 downto 0);
+SIGNAL memAddr_intdelay: std_LOGIC_VECTOR (3 downto 0);
 
 COMPONENT StateMachine 
     PORT(
@@ -37,14 +39,28 @@ COMPONENT counter
         enable : in STD_LOGIC;
         counterOut : out STD_LOGIC_VECTOR (3 downto 0));
     END COMPONENT;
+COMPONENT delay
+    PORT(
+        D : in STD_LOGIC_VECTOR (3 downto 0);
+        Q : out STD_LOGIC_VECTOR (3 downto 0);
+        clk : in STD_LOGIC);
+    END COMPONENT;
+        
    
 begin
+
+
     
     inst_counter: counter port map(
         clk => clk,
         rst => rst,
         enable => enableCounter ,
         counterOut => counterValue);
+        
+    inst_delay : delay port map(
+        D => counterValue ,
+        Q =>  memAddr_intdelay,
+        clk => clk);
     
     inst_StateMachine: StateMachine port map(
         done => done,
@@ -54,9 +70,9 @@ begin
         oper => oper,
         enable => enableCounter,
         addr => muxAddr,
-        index => counterValue);
+        index => memAddr_intdelay);
     
     memAddr <=counterValue;
-    
+    memAddr_delay <=memAddr_intdelay;
     
 end Behavioral;
