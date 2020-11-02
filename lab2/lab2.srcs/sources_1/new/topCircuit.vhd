@@ -93,6 +93,8 @@ begin
 
 memAddr <= "000000"&memAddr_int;
 memAddr_intdelay <= "000000"&memAddr_delay;
+we <= we_int;
+addr <= memAddr_delay;
 
 inst_Control : Control port map(
     clk => clk,
@@ -135,6 +137,6 @@ inst_memOut : memOut port map(
     C => C_int,
     D => D_int, 
     E => E_int,  
-    F => F_int);-- falta memIN
+    F => F_int);
 
 end Behavioral;

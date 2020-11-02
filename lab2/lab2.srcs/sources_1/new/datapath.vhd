@@ -26,7 +26,6 @@ architecture Behavioral of datapath is
     SIGNAL multiplier0Out, multiplier1Out : STD_LOGIC_VECTOR(31 downto 0);
     SIGNAL shiftedSignal :STD_LOGIC_VECTOR(31 downto 0);
     SIGNAL DONTCARE : STD_LOGIC_VECTOR(31 downto 0):= (others =>'X');
-    SIGNAL Zeros : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
     SIGNAL A, B, C, D, E, F: STD_LOGIC_VECTOR(31 downto 0);
     
 
