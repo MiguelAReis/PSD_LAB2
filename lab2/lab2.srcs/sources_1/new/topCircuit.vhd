@@ -107,7 +107,7 @@ inst_Control : Control port map(
     memAddr_delay =>memAddr_delay);
     
 we <= we_int;
-addr <= memAddr_delay;
+
 
 inst_datapath : datapath port map(
     clk => clk,

@@ -17,6 +17,7 @@ end Control;
 
 architecture Behavioral of Control is
 SIGNAL enableCounter : STD_LOGIC;
+SIGNAL we_delay : STD_LOGIC;
 SIGNAL counterValue: std_LOGIC_VECTOR (3 downto 0);
 SIGNAL memAddr_intdelay: std_LOGIC_VECTOR (3 downto 0);
 
@@ -65,7 +66,7 @@ begin
     inst_StateMachine: StateMachine port map(
         done => done,
         clk => clk,
-        we => we,
+        we => we_delay,
         rst => rst,
         oper => oper,
         enable => enableCounter,
@@ -74,5 +75,13 @@ begin
     
     memAddr <=counterValue;
     memAddr_delay <=memAddr_intdelay;
+   
+   
+    PROCESS(clk)
+    BEGIN
+        IF clk'event and clk ='1' then
+            we <= we_delay;
+        end if;
+    END PROCESS;
     
 end Behavioral;

@@ -48,12 +48,12 @@ begin
 
     PROCESS(clk, rst)
      BEGIN
-        if (rst = '1') then
-            count <= (others => '0');
-            check <= '0';
-        elsif clk'event and clk ='1' then
+        if clk'event and clk ='1' then
             if (enable = '1') then
             count <= count+1;
+           elsif (rst = '1') then
+            count <= (others => '0');
+            check <= '0';
             end if;
         end if;
     END PROCESS;

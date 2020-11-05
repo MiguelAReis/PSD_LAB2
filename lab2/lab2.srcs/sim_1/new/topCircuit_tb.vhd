@@ -54,7 +54,7 @@ END COMPONENT;
   SIGNAL addr : STD_LOGIC_VECTOR (3 downto 0):= (OTHERS =>'0');
   SIGNAL dataOUT : STD_LOGIC_VECTOR (31 downto 0):= (OTHERS =>'0');
 
-    CONSTANT clk_period: time := 10ns;
+    CONSTANT clk_period: time := 50ns;
 begin
 
     uut: topCircuit PORT MAP (
@@ -76,7 +76,7 @@ begin
      stim_proc : PROCESS
         BEGIN
             rst <=  '1' AFTER 0 ns,
-                    '0' AFTER 40 ns;
+                    '0' AFTER 200 ns;
         WAIT;
         END PROCESS;
 

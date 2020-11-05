@@ -22,9 +22,10 @@ architecture Behavioral of StateMachine is
 begin
     PROCESS (clk, rst)
     BEGIN
-        IF rst = '1' THEN
-            state <=s0;
-        ELSIF (clk'EVENT AND clk ='1') THEN
+        IF (clk'EVENT AND clk ='1') THEN
+            IF rst = '1' THEN
+                state <=s0;
+            ELSE
             CASE state IS 
                 WHEN s0 =>
                     state <= s1;
@@ -45,6 +46,7 @@ begin
                 WHEN OTHERS =>
                     state <= sFim;
              END CASE;
+             END IF;
         END IF;
     END PROCESS;
     

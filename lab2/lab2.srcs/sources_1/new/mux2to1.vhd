@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 11/02/2020 08:20:49 AM
+-- Create Date: 10/23/2020 06:30:33 PM
 -- Design Name: 
--- Module Name: delay - Behavioral
+-- Module Name: multiplexer - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,22 +31,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity delay is
-    Port ( D : in STD_LOGIC_VECTOR (3 downto 0);
-           Q : out STD_LOGIC_VECTOR (3 downto 0);
-           clk : in STD_LOGIC);
-end delay;
+entity mux2to1 is
+    Port ( inBus0 : in STD_LOGIC_VECTOR (31 downto 0);
+           inBus1 : in STD_LOGIC_VECTOR (31 downto 0);
+           outBus : out STD_LOGIC_VECTOR (31 downto 0);
+           address : in STD_LOGIC_VECTOR (1 downto 0));
+end mux2to1;
 
-architecture Behavioral of delay is
-SIGNAL int: STD_LOGIC_VECTOR (3 downto 0);
+architecture Behavioral of mux2to1 is
 
 begin
-PROCESS(clk)
-    BEGIN
-        IF clk'event and clk ='1' then
-            int <=D;
-            Q <= int;
-        end if;
-    END PROCESS;
-
+WITH address(1) SELECT
+    outBus <= inBus0 when '0',
+              inBus1 WHEN OTHERS;
+              
+              
 end Behavioral;
