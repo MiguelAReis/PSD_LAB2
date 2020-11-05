@@ -75,6 +75,10 @@ begin
     
      stim_proc : PROCESS
         BEGIN
+         WAIT FOR 100 ns;
+
+        WAIT FOR clk_period*10;
+        
             rst <=  '1' AFTER 0 ns,
                     '0' AFTER 200 ns;
         WAIT;
